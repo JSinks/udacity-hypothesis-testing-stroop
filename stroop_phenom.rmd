@@ -1,0 +1,114 @@
+---
+title: "Analysing the Stroop Phenomenon"
+author: "Jeff Sinclair"
+date: "26/01/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(warn=-1)
+```
+
+## Background Information
+In a Stroop task, participants are presented with a list of words, with each word displayed in a color of ink. The participant’s task is to say out loud the color of the ink in which the word is printed. The task has two conditions: a congruent words condition, and an incongruent words condition. 
+
+* In the congruent words condition, the words being displayed are color words whose names match the colors in which they are printed: for example RED, BLUE.
+* In the incongruent words condition, the words displayed are color words whose names do not match the colors in which they are printed: for example PURPLE, ORANGE. 
+
+In each case, we measure the time it takes to name the ink colors in equal.
+
+
+## Questions
+### 1. Variable identification
+
+The independent variable that is being tested in a stroop task is whether the words are congruent or incongruent (i.e. does the color of the word match the word that is displayed or not)
+
+The dependent variable is how long the participant takes to say the word.
+
+### 2a. Experiment Hypothesis
+ 
+The null hypothesis is that the participants will say the same number of words incorrectly regardless of the colour of the word.
+
+**H0: CE >= IE**
+Null hypothesis is that congruent word errors are greater than or equal to the incongruent word errors
+ 
+The alternate hypothesis would be that the participants perform better when the words are the same colour as the actual text written (e.g. the words are congruent).
+
+**Ha: CE < IE** 
+Alternate hypothesis is that congruent word errors are less than incongruent word errors
+
+### 2b. Statistical test to be performed
+
+The statistical test that would be performed is a repeated measures dependent test, given the test is likely to have the same subjects repeat the exercise twice. We would measure the result using a t-test, to find whether there is a significant, and meaningful difference in the mean performance of the different test groups.
+ 
+Significance would be determined using a one-tailed t-test given that we’re looking at sample populations and the alternate hypothesis is one directional (expecting a decrease in errors observed).
+ 
+I would expect to have an alpha level of *0.05*, or confidence of *95%*
+
+### 3. Data-set statistical insights
+
+```{r}
+stroop <- read.csv('stroopdata.csv', sep = ',')
+nrow(stroop)
+```
+
+The data set provided shows a sample of participants in a Stroop effect experiment. There appear to be 24 samples of data in the data set, and the summarised statistics for both congruent and incongruent words are shown below.
+
+```{r}
+summary(stroop)
+```
+
+The first thing we can note is the mean of the congruent data set is noteably lower than the incongruent results (**14.05** in Congruent, to **22.02** in Incongruent).
+
+```{r}
+IQR(stroop$Congruent)
+IQR(stroop$Incongruent)
+```
+
+There is also a larger degree of variability for the Incongruent results, with Congruent having an IQR of **4.3055** and Incongruent having an IQR of **5.33475**.
+
+### 4. Data-set visualisation
+
+Using boxplots of the respective data you can see these differences play out between the two sets of data. In the first plot I did of this data, there were some outlier points in the Incongruent data set which made it difficult to compare the two charts.
+
+Accordingly I set the limits consistently for the charts and removed the outliers to provide better insight into the distribution of data.
+
+```{r}
+library(ggplot2)
+library(gridExtra)
+p1 <- ggplot(aes(x=1, y=Congruent), data=stroop) +
+  geom_boxplot() +
+  scale_y_continuous(limits = c(10, 30))
+p2 <- ggplot(aes(x=1, y=Incongruent), data=stroop) +
+  geom_boxplot() +
+  scale_y_continuous(limits = c(10, 30))
+
+grid.arrange(p1, p2, ncol=2)
+```
+ 
+ 
+### 5. Testing & Conclusion
+
+Let's perform the test and see what the result is!
+ 
+```{r}
+t.test(stroop$Congruent, stroop$Incongruent, paired=TRUE, alternative="less")
+```
+ 
+The results of the T-test above demonstrate a statistically significant result (at p < 0.05, p-value = 0.0000002052), and as a result we should reject the null hypothesis. The conclusion we can draw here is that the stroop effect does indeed exist, and that users are significantly faster at the challenge when the words and colours of the words are congruent.
+
+This test does not give us insight into the magnitude of the difference in speed, but does confirm that there is a difference between the means of the two test groups.
+ 
+### 6. Alternate tests
+
+The effects observed are likely caused by pattern recognition in the brain. The human brain is likely successful at recognising common patterns readily, but struggles when the pattern presented does not match with the expected value - causing a few milliseconds of delay in the participants ability to accurately respond.
+
+Another experiment that could be performed with similar effects could be with shapes instead of words - as in showing shapes to a subject that are outlined in a certain colour and asking the subject to recite the name of the shape, or the name of the colour.
+
+I would expect another test like this to cause a similar cognitive load and have similar differences in testing results as what we observed today.
+
+## References
+
+* https://www.statmethods.net/stats/ttest.html
+* https://s3.amazonaws.com/udacity-hosted-downloads/t-table.jpg

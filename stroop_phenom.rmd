@@ -28,15 +28,14 @@ The dependent variable is how long the participant takes to say the word.
 
 ### 2a. Experiment Hypothesis
  
-The null hypothesis is that the participants will say the same number of words incorrectly regardless of the colour of the word.
+The null hypothesis is that the mean time for the population to repeat congruent words is as slow or slower than repeating incongruent words.
 
-**H0: CE >= IE**
-Null hypothesis is that congruent word errors are greater than or equal to the incongruent word errors
- 
-The alternate hypothesis would be that the participants perform better when the words are the same colour as the actual text written (e.g. the words are congruent).
+The alternate hypothesis is that the mean time for the population to repeat congruent words is faster than repeating incongruent words.
 
-**Ha: CE < IE** 
-Alternate hypothesis is that congruent word errors are less than incongruent word errors
+* **H0: CMT >= IMT**
+* **Ha: CMT < IMT** 
+
+_where CMT = the mean time to say congruent words, and IMT = the mean time to say incongruent words_
 
 ### 2b. Statistical test to be performed
 
